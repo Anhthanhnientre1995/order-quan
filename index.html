@@ -3,7 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <title>Quản lý Order Quán</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+      content="width=device-width,
+               initial-scale=1.0,
+               maximum-scale=1.0,
+               user-scalable=no">
+
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
@@ -11,6 +16,48 @@
 body{font-family:Arial,sans-serif;margin:0;padding:12px}
 h2,h3{margin:12px 0}
 button{cursor:pointer}
+body{
+  -webkit-text-size-adjust: 100%;
+}
+html, body {
+  touch-action: manipulation;
+}
+
+/* ===== iPad TOUCH OPTIMIZATION ===== */
+@media (hover: none) and (pointer: coarse) {
+
+  /* Nút MENU */
+  .menu-items button{
+    font-size:36px;
+    padding:28px;
+    border-radius:18px;
+  }
+
+  /* Nút BÀN */
+  .table-btn{
+    font-size:48px;
+    padding:34px 0;
+  }
+
+  /* Nút THANH TOÁN */
+  .btn{
+    font-size:32px;
+    padding:24px;
+    border-radius:12px;
+  }
+
+  /* Checkbox order */
+  input[type="checkbox"]{
+    width:28px;
+    height:28px;
+  }
+
+  /* Danh sách order */
+  .order li{
+    font-size:30px;
+  }
+
+}
 
 /* layout */
 .wrapper{display:flex;gap:12px}
@@ -39,37 +86,62 @@ button{cursor:pointer}
   margin:12px 0 20px;
 }
 
-/* ===== MENU MỚI (CHỈ PHẦN NÀY ĐƯỢC SỬA) ===== */
-.menu-group-block{margin-bottom:36px}
+/* ===== MENU ===== */
+.menu-group-block{
+  margin-bottom: 40px;
+}
 
 .menu-price{
-  margin-top:32px;
-  margin-bottom:14px;
-  font-size:28px;
-  font-weight:bold;
-  border-bottom:2px solid #ddd;
-  padding-bottom:6px;
+  margin-top: 32px;
+  margin-bottom: 16px;
+  font-size: 30px;
+  font-weight: bold;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 6px;
 }
 
 .menu-items{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;                /* ✅ KHOẢNG CÁCH NÚT */
 }
 
 .menu-items button{
-  font-size:26px;
-  padding:22px;
-  border-radius:14px;
-  border:2px solid #333;
-  background:#f5f5f5;
-  text-align:left;
+  font-size: 32px;          /* ✅ FONT TO */
+  font-weight: 600;
+  padding: 28px 24px;
+  border-radius: 18px;
+  border: 2px solid #333;
+  background: #f5f5f5;
+  text-align: center;
+  line-height: 1.25;
 }
 
 .menu-items button:active{
   background:#d9f2ff;
   border-color:#0077cc;
 }
+
+/* ===== iPad CẢM ỨNG ===== */
+@media (hover: none) and (pointer: coarse){
+  .menu-items{
+    grid-template-columns: repeat(3, 1fr);
+    gap: 26px;              /* ✅ RỘNG HƠN CHO NGÓN TAY */
+  }
+
+  .menu-items button{
+    font-size: 36px;
+    padding: 34px 28px;
+  }
+}
+
+/* ===== iPad DỌC / MOBILE ===== */
+@media (max-width: 900px){
+  .menu-items{
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 
 /* order */
 .order li{
@@ -137,13 +209,40 @@ button{cursor:pointer}
 }
 
 
-/* iPad */
-@media(max-width:1200px){
-  .wrapper{flex-direction:column}
-  .right{border:none;padding:0}
-  .menu-items{grid-template-columns:repeat(2,1fr)}
-  .menu-items button{font-size:40px}
+/* iPad ngang + laptop */
+@media (min-width: 901px) and (max-width: 1200px) and (orientation: landscape) {
+  .wrapper {
+    flex-direction: row;
+  }
+
+  .left  { flex: 2.2; }
+  .mid   { flex: 2; }
+  .right { flex: 1.2; }
+
+  .menu-items{
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
+
+/* iPad dọc + mobile */
+@media (max-width: 900px) and (orientation: portrait) {
+  .wrapper {
+    flex-direction: column;
+  }
+
+  .right {
+    order: -1;
+    position: sticky;
+    top: 0;
+  }
+
+  .menu-items{
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+}
+
 </style>
 </head>
 <!-- POPUP -->
@@ -157,6 +256,8 @@ button{cursor:pointer}
 </div>
 
 <body>
+
+
 
 <h2>QUẢN LÝ ORDER QUÁN</h2>
 
@@ -310,6 +411,10 @@ function showPopup(html){
 
 function closePopup(){document.getElementById("overlay").style.display="none";}
 renderTables();render();setInterval(renderTables,60000);
+document.addEventListener('gesturestart', function (e) {
+  e.preventDefault();
+});
+
 </script>
 
 </body>

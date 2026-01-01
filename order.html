@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Order Quán</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+/* =======================
+   BASE (DESKTOP DEFAULT)
+   ======================= */
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  gap: 20px;
+}
+
+#left { width: 65%; }
+#right {
+  width: 35%;
+  border-left: 2px solid #ccc;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+#tables {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.btn-table {
+  padding: 18px 22px;
+  font-size: 28px;
+  background: white;
+  border: 2px solid #999;
+}
+
+.btn-table.has-order { background: #fff3cd; }
+.btn-table.active {
+  border: 4px solid #2ecc71;
+  background: #eafff1;
+}
+
+.menu-group b {
+  display: block;
+  margin: 18px 0 10px;
+  font-size: 26px;
+}
+
+.btn-food {
+  width: 360px;
+  text-align: left;
+  padding: 18px;
+  margin: 8px;
+  font-size: 30px;
+  background: #f0f0f0;
+  border-radius: 10px;
+}
+
+.order-item {
+  font-size: 26px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.order-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.order-done {
+  color: #777;
+  text-decoration: line-through;
+}
+
+#paymentBox {
+  background: #f8d7da;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+#totalMoney {
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.big-btn {
+  font-size: 22px;
+  padding: 14px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+#payBtn { background: darkred; color: white; border: none; }
+#undoBtn { background: #555; color: white; border: none; }
+#printBtn { background: #444; color: white; border: none; }
+#viewDayBtn { background: #1f6feb; color: white; border: none; }
+#closeDayBtn {
+  background: black;
+  color: white;
+  margin-top: auto;
+  padding: 14px;
+  font-size: 20px;
+}
+
+#miniSummary li {
+  font-size: 22px;
+  cursor: pointer;
+  margin: 6px 0;
+}
+
+.paid-bill {
+  border: 1px solid #aaa;
+  padding: 10px;
+  margin: 10px 0;
+  font-size: 20px;
+}
+
+/* =======================
+   PRINT
+   ======================= */
+@media print {
+  body * { display: none; }
+  #printArea, #printArea * { display: block; }
+}
+
+/* =======================
+   IPAD UI (<=1200px)
+   ======================= */
+@media (max-width: 1200px) {
+
+  body {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  #left, #right {
+    width: 100%;
+    border: none;
+    padding: 0;
+  }
+
+  .btn-table {
+    flex: 1 0 30%;
+    font-size: 32px;
+    padding: 20px 0;
+  }
+
+  .btn-food {
+    width: 100%;
+    font-size: 32px;
+    padding: 22px;
+  }
+
+  .menu-group b {
+    font-size: 30px;
+  }
+
+  #orderList {
+    max-height: 260px;
+    overflow-y: auto;
+    border-top: 2px solid #ddd;
+    padding-top: 10px;
+  }
+
+  .order-item {
+    font-size: 30px;
+  }
+
+  #paymentBox {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    padding: 24px;
+  }
+
+  #totalMoney {
+    font-size: 48px;
+  }
+
+  #payBtn {
+    font-size: 34px;
+    padding: 24px;
+  }
+
+  #undoBtn, #printBtn {
+    font-size: 26px;
+    padding: 18px;
+  }
+
+  #paidList, #closeDayBtn {
+    display: none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="left">
+<h2>CHỌN BÀN</h2>
+<div id="tables"></div>
+<button onclick="addTakeaway()" class="big-btn">+ MANG VỀ</button>
+
+<h2>MENU</h2>
+
+<div class="menu-group"><b>25.000đ</b>
+<button class="btn-food" data-price="25000">Bún chả thường</button>
+<button class="btn-food" data-price="25000">Bún chả quạt *</button>
+<button class="btn-food" data-price="25000">Bún chả lá lốt *</button>
+<button class="btn-food" data-price="25000">Bún mọc *</button>
+<button class="btn-food" data-price="25000">Bún lòng</button>
+<button class="btn-food" data-price="25000">Bún riêu cua *</button>
+<button class="btn-food" data-price="25000">Mì tôm</button>
+</div>
+
+<div class="menu-group"><b>20.000đ</b>
+<button class="btn-food" data-price="20000">Cháo</button>
+<button class="btn-food" data-price="20000">Tiết canh</button>
+</div>
+
+<div class="menu-group"><b>15.000đ</b>
+<button class="btn-food" data-price="15000">Thuốc lá</button>
+<button class="btn-food" data-price="15000">Bia</button>
+<button class="btn-food" data-price="15000">Rượu</button>
+<button class="btn-food" data-price="15000">Bò Húc</button>
+</div>
+
+<div class="menu-group"><b>10.000đ</b>
+<button class="btn-food" data-price="10000">Coca</button>
+</div>
+
+<div class="menu-group"><b>Khác</b>
+<button class="btn-food" data-price="30000">Mix 30.000đ</button>
+<button class="btn-food" data-price="100000">Đĩa lòng 100.000đ</button>
+<button class="btn-food" data-price="150000">Đĩa lòng 150.000đ</button>
+<button class="btn-food" data-price="200000">Đĩa lòng 200.000đ</button>
+</div>
+</div>
+
+<div id="right">
+
+<div id="paymentBox">
+  <div>Đơn: <b id="currentTable">---</b></div>
+  <div id="totalMoney">0 đ</div>
+  <button id="payBtn" class="big-btn">THANH TOÁN</button>
+  <button id="undoBtn" class="big-btn" disabled>UNDO</button>
+  <button id="printBtn" class="big-btn">IN ĐƠN</button>
+  <button id="viewDayBtn" class="big-btn">XEM THỐNG KÊ NGÀY</button>
+</div>
+
+<h3>ĐƠN CHỜ THANH TOÁN</h3>
+<ul id="miniSummary"></ul>
+
+<h3>ORDER</h3>
+<ul id="orderList"></ul>
+
+<h3>LỊCH SỬ ĐƠN ĐÃ THANH TOÁN</h3>
+<div id="paidList"></div>
+
+<button id="closeDayBtn">CHỐT CUỐI NGÀY</button>
+<div id="printArea"></div>
+
+</div>
+
+<script>
+/* ===== LOGIC JS GIỮ NGUYÊN BẢN CHUẨN CUỐI ===== */
+/* (không thay đổi để tránh lỗi) */
+
+const fixedTables=["B1","B2","B3","B4","B5","B6","B7","B8","B9"];
+let takeawayCount=Number(localStorage.getItem("takeawayCount")||0);
+
+const prices={}, orders=JSON.parse(localStorage.getItem("orders")||"{}");
+let paidBills=JSON.parse(localStorage.getItem("paidBills")||"[]");
+let soldItems=JSON.parse(localStorage.getItem("soldItems")||"[]");
+
+let current="";
+let lastBackup=null;
+
+document.querySelectorAll(".btn-food").forEach(b=>prices[b.innerText]=+b.dataset.price);
+
+function save(){
+  localStorage.setItem("orders",JSON.stringify(orders));
+  localStorage.setItem("paidBills",JSON.stringify(paidBills));
+  localStorage.setItem("soldItems",JSON.stringify(soldItems));
+  localStorage.setItem("takeawayCount",takeawayCount);
+}
+
+function renderTables(){
+  const box=document.getElementById("tables");
+  box.innerHTML="";
+  fixedTables.forEach(t=>{
+    const b=document.createElement("button");
+    b.innerText=t;
+    b.className="btn-table"+(orders[t]?.length?" has-order":"")+(current===t?" active":"");
+    b.onclick=()=>selectTable(t);
+    box.appendChild(b);
+  });
+  Object.keys(orders).forEach(t=>{
+    if(t.startsWith("MV")){
+      const b=document.createElement("button");
+      b.innerText=t;
+      b.className="btn-table has-order"+(current===t?" active":"");
+      b.onclick=()=>selectTable(t);
+      box.appendChild(b);
+    }
+  });
+}
+
+function addTakeaway(){
+  takeawayCount++;
+  const id="MV"+String(takeawayCount).padStart(2,"0");
+  orders[id]=[];
+  save(); renderTables(); selectTable(id);
+}
+
+function selectTable(t){
+  current=t;
+  renderTables(); render();
+}
+
+document.querySelectorAll(".btn-food").forEach(btn=>{
+  btn.onclick=()=>{
+    if(!current) return alert("Chưa chọn đơn");
+    orders[current]=orders[current]||[];
+    orders[current].push({name:btn.innerText,price:prices[btn.innerText],done:false});
+    save(); renderTables(); render();
+  };
+});
+
+function render(){
+  const ul=document.getElementById("orderList");
+  ul.innerHTML="";
+  let total=0;
+  (orders[current]||[]).forEach((o,i)=>{
+    total+=o.price;
+    const li=document.createElement("li");
+    li.className="order-item"+(o.done?" order-done":"");
+    const left=document.createElement("div");
+    left.className="order-left";
+    const cb=document.createElement("input");
+    cb.type="checkbox";
+    cb.checked=o.done;
+    cb.onchange=()=>{o.done=cb.checked; save(); render();};
+    left.append(`${i+1}.`);
+    left.append(cb);
+    left.append(o.name);
+    li.appendChild(left);
+    li.append(`${o.price.toLocaleString()} đ`);
+    ul.appendChild(li);
+  });
+  document.getElementById("currentTable").innerText=current||"---";
+  document.getElementById("totalMoney").innerText=total.toLocaleString()+" đ";
+  renderMini();
+}
+
+function renderMini(){
+  const ul=document.getElementById("miniSummary");
+  ul.innerHTML="";
+  Object.keys(orders).forEach(t=>{
+    if(!orders[t]?.length) return;
+    const sum=orders[t].reduce((a,o)=>a+o.price,0);
+    const li=document.createElement("li");
+    li.innerText=`${t} – ${sum.toLocaleString()} đ`;
+    li.onclick=()=>selectTable(t);
+    ul.appendChild(li);
+  });
+}
+
+document.getElementById("payBtn").onclick=()=>{
+  if(!current) return;
+  lastBackup={table:current,items:JSON.parse(JSON.stringify(orders[current]))};
+  const time=new Date().toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit"});
+  paidBills.unshift({id:current,time,items:[...orders[current]]});
+  soldItems.push(...orders[current]);
+  if(current.startsWith("MV")) delete orders[current];
+  else orders[current]=[];
+  current="";
+  save(); renderTables(); render(); renderPaid();
+  document.getElementById("undoBtn").disabled=false;
+};
+
+document.getElementById("undoBtn").onclick=()=>{
+  if(!lastBackup) return;
+  orders[lastBackup.table]=lastBackup.items;
+  current=lastBackup.table;
+  lastBackup=null;
+  save(); renderTables(); render();
+  document.getElementById("undoBtn").disabled=true;
+};
+
+document.getElementById("printBtn").onclick=()=>{
+  if(!current || !orders[current]) return;
+  let sum=0, html=`<h2>HÓA ĐƠN ${current}</h2>`;
+  orders[current].forEach(o=>{
+    sum+=o.price;
+    html+=`${o.name} - ${o.price.toLocaleString()} đ<br>`;
+  });
+  html+=`<hr><b>Tổng: ${sum.toLocaleString()} đ</b>`;
+  document.getElementById("printArea").innerHTML=html;
+  window.print();
+};
+
+function renderPaid(){
+  const box=document.getElementById("paidList");
+  box.innerHTML="";
+  paidBills.forEach(b=>{
+    let sum=0;
+    const div=document.createElement("div");
+    div.className="paid-bill";
+    div.innerHTML=`<b>${b.time} – ${b.id}</b><br>`;
+    b.items.forEach(i=>{
+      sum+=i.price;
+      div.innerHTML+=`- ${i.name} (${i.price.toLocaleString()} đ)<br>`;
+    });
+    div.innerHTML+=`<b>Tổng: ${sum.toLocaleString()} đ</b>`;
+    box.appendChild(div);
+  });
+}
+
+document.getElementById("viewDayBtn").onclick=()=>{
+  const today=new Date().toLocaleDateString("vi-VN");
+  let map={}, total=0;
+  soldItems.forEach(i=>{
+    map[i.name]=(map[i.name]||0)+1;
+    total+=i.price;
+  });
+  let html=`<h2>THỐNG KÊ NGÀY ${today}</h2>`;
+  Object.keys(map).forEach(n=>{
+    html+=`${n} x ${map[n]} = ${(map[n]*prices[n]).toLocaleString()} đ<br>`;
+  });
+  html+=`<hr><h1>TỔNG DOANH THU: ${total.toLocaleString()} đ</h1>`;
+  document.getElementById("printArea").innerHTML=html;
+  window.print();
+};
+
+document.getElementById("closeDayBtn").onclick=()=>{
+  if(!confirm("Xác nhận chốt ngày?")) return;
+  localStorage.clear();
+  location.reload();
+};
+
+renderTables();
+renderPaid();
+</script>
+
+</body>
+</html>

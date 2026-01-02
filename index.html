@@ -75,9 +75,17 @@ html,body{touch-action:manipulation;}
 .menu-price{margin:20px 0 10px;font-size:22px;font-weight:bold;border-bottom:2px solid #ddd;padding-bottom:4px;}
 .menu-items{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
 .menu-items button{
-  font-size:24px;font-weight:600;padding:16px 14px;
-  border-radius:10px;border:2px solid #333;background:#f5f5f5;
-  text-align:center;line-height:1.2;
+  font-size: 23px !important;           /* Giảm nhẹ font để vừa hơn */
+  font-weight: 600;
+  padding: 16px 10px !important;        /* Giảm padding ngang để nút rộng hơn */
+  border-radius: 10px;
+  border: 2px solid #333;
+  background: #f5f5f5;
+  text-align: center;
+  line-height: 1.2;
+  white-space: nowrap !important;       /* Không xuống dòng */
+  overflow: hidden !important;          /* Ẩn phần tràn */
+  text-overflow: ellipsis !important;   /* Thêm ... nếu quá dài */
 }
 .menu-items button:active{background:#d9f2ff;border-color:#0077cc;}
 

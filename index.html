@@ -73,22 +73,26 @@ html,body{touch-action:manipulation;}
 /* MENU */
 .menu-group-block{margin-bottom:25px;}
 .menu-price{margin:20px 0 10px;font-size:22px;font-weight:bold;border-bottom:2px solid #ddd;padding-bottom:4px;}
-.menu-items{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.menu-items{
+  display: grid;
+  grid-template-columns: repeat(4, minmax(130px, 1fr)) !important; /* Tối thiểu 130px mỗi cột → đủ chỗ cho tên dài */
+  gap: 12px;
+}
 /* Nút món - hiển thị đầy đủ, nằm gọn trong ô */
 .menu-items button{
   font-size: 22px !important;           /* Font vừa phải trên iPad */
   font-weight: 600;
-  padding: 14px 8px !important;         /* Padding cân đối */
+  padding: 16px 10px !important;        /* Padding dọc giữ đẹp, ngang giảm để rộng hơn */
   border-radius: 10px;
   border: 2px solid #333;
   background: #f5f5f5;
   text-align: center;
   line-height: 1.3;
   white-space: nowrap !important;       /* Không xuống dòng */
-  overflow: hidden !important;          /* Không cho chữ tràn ra ngoài */
-
-  max-width: 100% !important;           /* Không vượt quá ô cha */
-  box-sizing: border-box !important;    /* Quan trọng: padding nằm trong width */
+  overflow: hidden !important;          /* Không tràn ra ngoài */
+  text-overflow: clip !important;       /* Không dùng "..." → cắt gọn nếu quá dài (nhưng với min-width mới sẽ không xảy ra) */
+  max-width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 /* Grid menu - cho phép cột tự mở rộng theo nội dung dài nhất */

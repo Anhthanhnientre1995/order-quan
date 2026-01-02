@@ -3,261 +3,133 @@
 <head>
 <meta charset="UTF-8">
 <title>Quản lý Order Quán</title>
-<meta name="viewport"
-      content="width=device-width,
-               initial-scale=1.0,
-               maximum-scale=1.0,
-               user-scalable=no">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
-body{font-family:Arial,sans-serif;margin:0;padding:12px}
-h2,h3{margin:12px 0}
+body{font-family:Arial,sans-serif;margin:0;padding:10px}
+h2,h3{margin:10px 0}
 button{cursor:pointer}
-body{
-  -webkit-text-size-adjust: 100%;
+body{-webkit-text-size-adjust:100%;}
+html,body{touch-action:manipulation;}
+/* Tô màu RIÊNG CHO NÚT "Nước riêu" - CHỈ NHÓM 25.000đ */
+.menu-group-block:first-of-type .menu-items button:first-child {
+  background: #ffb366 !important; /* Cam nhạt riêu cua */
+  color: #333 !important; /* Chữ tối dễ đọc */
+  border-color: #ff8c00 !important;
+  font-weight: bold !important; /* In đậm nổi bật */
 }
-html, body {
-  touch-action: manipulation;
+
+/* Khi bấm nút vẫn highlight đẹp */
+.menu-group-block:first-of-type .menu-items button:first-child:active {
+  background: #ffda99 !important;
+  border-color: #e67e22 !important;
 }
-
-/* ===== iPad TOUCH OPTIMIZATION ===== */
-@media (hover: none) and (pointer: coarse) {
-
-  /* Nút MENU */
-  .menu-items button{
-    font-size:30px;
-    padding:22px;
-    border-radius:12px;
-  }
-
-  /* Nút BÀN */
-  .table-btn{
-    font-size:48px;
-    padding:34px 0;
-  }
-
-  /* Nút THANH TOÁN */
-  .btn{
-    font-size:32px;
-    padding:24px;
-    border-radius:12px;
-  }
-
-  /* Checkbox order */
-  input[type="checkbox"]{
-    width:28px;
-    height:28px;
-  }
-
-  /* Danh sách order */
-  .order li{
-    font-size:30px;
-  }
-
+/* iPad TOUCH OPTIMIZATION */
+@media (hover:none) and (pointer:coarse){
+  .menu-items button{font-size:26px;padding:18px;border-radius:10px;}
+  .table-btn{font-size:26px;padding:16px 0;}
+  .btn{font-size:22px;padding:16px;border-radius:8px;}
+  input[type="checkbox"]{width:26px;height:26px;}
+  .order li{font-size:22px;}
 }
 
 /* layout */
-.wrapper{display:flex;gap:12px}
-.left{flex:2}
-.mid{flex:2}
-.right{flex:1;border-left:2px solid #ccc;padding-left:12px}
+.wrapper{display:flex;gap:10px;height:calc(100vh - 80px);}
+.left{flex:2.8;overflow-y:auto;}
+.mid{flex:2;overflow-y:auto;}
+.right{flex:1;border-left:2px solid #ccc;padding-left:10px;overflow-y:auto;}
 
-/* bàn */
-.tables{display:flex;flex-wrap:wrap;gap:10px}
+/* BÀN */
+.tables{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
 .table-btn{
-  flex:1 0 30%;
-  font-size:42px;
-  font-weight:600;
-  padding:28px 0;
-  border:3px solid #999;
-  background:#fff;
+  flex:1 0 22%;
+  font-size:28px;font-weight:600;padding:16px 0;
+  border:3px solid #999;background:#fff;border-radius:8px;
 }
 .table-btn.active{border:4px solid #2ecc71;background:#eafff1}
+.table-btn.selected{border:4px solid #3498db;background:#d9f2ff}
 .warn{background:#fff3cd}
 .danger{background:#f8d7da}
+.super-danger{background:#ffcccc}
 
 /* mang về */
 .btn-takeaway{
-  font-size:30px;
-  padding:14px 20px;
-  margin:12px 0 20px;
+  font-size:22px;padding:10px 16px;margin:8px 0;
 }
 
-/* ===== MENU ===== */
-.menu-group-block{
-  margin-bottom: 40px;
-}
-
-.menu-price{
-  margin-top: 32px;
-  margin-bottom: 16px;
-  font-size: 30px;
-  font-weight: bold;
-  border-bottom: 2px solid #ddd;
-  padding-bottom: 6px;
-}
-
-.menu-items{
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;                /* ✅ KHOẢNG CÁCH NÚT */
-}
-
+/* MENU */
+.menu-group-block{margin-bottom:25px;}
+.menu-price{margin:20px 0 10px;font-size:22px;font-weight:bold;border-bottom:2px solid #ddd;padding-bottom:4px;}
+.menu-items{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
 .menu-items button{
-  font-size: 32px;          /* ✅ FONT TO */
-  font-weight: 600;
-  padding: 28px 24px;
-  border-radius: 18px;
-  border: 2px solid #333;
-  background: #f5f5f5;
-  text-align: center;
-  line-height: 1.25;
+  font-size:24px;font-weight:600;padding:16px 14px;
+  border-radius:10px;border:2px solid #333;background:#f5f5f5;
+  text-align:center;line-height:1.2;
 }
-
-.menu-items button:active{
-  background:#d9f2ff;
-  border-color:#0077cc;
-}
-
-/* ===== iPad CẢM ỨNG ===== */
-@media (hover: none) and (pointer: coarse){
-  .menu-items{
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;              /* ✅ RỘNG HƠN CHO NGÓN TAY */
-  }
-
-  .menu-items button{
-    font-size: 30px;
-    padding: 28px 24px;
-  }
-}
-
-/* ===== iPad DỌC / MOBILE ===== */
-@media (max-width: 900px){
-  .menu-items{
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
+.menu-items button:active{background:#d9f2ff;border-color:#0077cc;}
 
 /* order */
 .order li{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-size:26px;
-  margin:8px 0;
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:20px;margin:5px 0;
 }
-.order-left{display:flex;gap:8px;align-items:center}
+.order-left{display:flex;gap:5px;align-items:center;}
 .done{text-decoration:line-through;color:#777}
 .longest{font-weight:bold;color:#b30000}
-.del{color:red;font-weight:bold;margin-left:6px}
+.del{color:red;font-weight:bold;margin-left:4px}
 
 /* thanh toán */
 .payment-box{
-  background:#f7dede;
-  padding:20px;
-  border-radius:6px;
-  text-align:center;
-  position:sticky;
-  bottom:0;
+  background:#f7dede;padding:12px;border-radius:6px;text-align:center;
+  position:sticky;bottom:0;z-index:5;
 }
-.bill-title{font-size:22px;margin-bottom:10px}
-.bill-total{font-size:56px;font-weight:bold;margin-bottom:20px}
+.bill-title{font-size:18px;margin-bottom:6px}
+.bill-total{font-size:44px;font-weight:bold;margin-bottom:12px;color:#c0392b;}
 .btn{
-  width:100%;
-  font-size:28px;
-  padding:18px;
-  margin:10px 0;
-  border:none;
-  color:white;
+  width:100%;font-size:22px;padding:14px;margin:6px 0;
+  border:none;color:white;border-radius:6px;
 }
 .btn.pay{background:#7a0c00}
 .btn.undo,.btn.print{background:#555}
 .btn.stats{background:#3b6ee3}
 .btn.excel{background:#2e7d32}
 .btn.close{background:#000}
+.btn.discount{background:#8e44ad}
+.btn.clear{background:#c0392b}
+.btn.merge{background:#2980b9}
+.btn.merge.active{background:#1abc9c}
 
-/* danh sách hoạt động */
-.active-list li{font-size:24px;margin:8px 0;cursor:pointer}
+/* hoạt động */
+.active-list li{font-size:19px;margin:5px 0;cursor:pointer;line-height:1.4;}
 
 /* lịch sử */
-.history{max-height:260px;overflow:auto;border-top:1px solid #ccc;margin-top:10px}
+.history{max-height:500px;overflow:auto;border-top:1px solid #ccc;margin-top:10px}
+.history > div{
+  margin-bottom:30px;padding-bottom:15px;border-bottom:1px dashed #ccc;
+  font-size:24px;line-height:1.6;
+}
+.history b{font-size:26px;}
 
 /* popup */
-#overlay{
-  display:none;
-  position:fixed;
-  top:0;
-  left:0;
-  width:100vw;
-  height:100vh;
-  background:rgba(0,0,0,0.6);
-  z-index:999999;
-  justify-content:center;
-  align-items:center;
-}
-
-#popup{
-  background:#fff;
-  padding:20px;
-  max-height:90%;
-  overflow:auto;
-}
-
-
-/* iPad ngang + laptop */
-@media (min-width: 901px) and (max-width: 1200px) and (orientation: landscape) {
-  .wrapper {
-    flex-direction: row;
-  }
-
-  .left  { flex: 2.2; }
-  .mid   { flex: 2; }
-  .right { flex: 1.2; }
-
-  .menu-items{
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-/* iPad dọc + mobile */
-@media (max-width: 900px) and (orientation: portrait) {
-  .wrapper {
-    flex-direction: column;
-  }
-
-  .right {
-    order: -1;
-    position: sticky;
-    top: 0;
-  }
-
-  .menu-items{
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-}
-
+#overlay{display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;
+  background:rgba(0,0,0,0.6);z-index:999999;justify-content:center;align-items:center;}
+#popup{background:#fff;padding:20px;max-height:90%;overflow:auto;border-radius:12px;width:90%;max-width:500px;}
 </style>
 </head>
+
+<body>
+
 <!-- POPUP -->
 <div id="overlay">
   <div id="popup">
-    <button onclick="closePopup()" style="font-size:20px;margin-bottom:10px">
+    <button onclick="closePopup()" style="font-size:20px;margin-bottom:10px;width:100%;padding:12px;background:#333;color:white;border:none;border-radius:8px;">
       ĐÓNG
     </button>
     <div id="popupContent"></div>
   </div>
 </div>
-
-<body>
-
-
 
 <h2>QUẢN LÝ ORDER QUÁN</h2>
 
@@ -273,23 +145,24 @@ html, body {
 </div>
 
 <div class="mid">
-<h3>ORDER: <span id="current">---</span></h3>
+<h3>ORDER: <span id="current">---</span> <span id="startTime" style="font-size:16px;color:#555;"></span></h3>
 <ul class="order" id="orderList"></ul>
+
+<button class="btn clear" onclick="clearCurrentOrder()">XÓA TOÀN BỘ ORDER</button>
+<button class="btn merge" onclick="toggleMergeMode()" id="mergeBtn">GỘP ĐƠN</button>
 </div>
 
 <div class="right">
-
 <div class="payment-box">
-  <div class="bill-title">ĐƠN: <span id="currentBox">---</span></div>
+  <div class="bill-title">Đơn: <span id="currentBox">---</span></div>
   <div class="bill-total" id="total">0 đ</div>
+  <div style="font-size:22px;margin:10px 0;" id="discountAmount">Chiết khấu: 0đ</div>
 
+  <button class="btn discount" onclick="applyDiscount()">ÁP DỤNG CHIẾT KHẤU</button>
   <button class="btn pay" onclick="pay()">THANH TOÁN</button>
   <button class="btn undo" onclick="undoPay()">LÀM LẠI</button>
   <button class="btn print" onclick="printBill()">IN ĐƠN</button>
-<button class="btn stats" onclick="showStats()">
-  XEM THỐNG KÊ NGÀY
-</button>
-
+  <button class="btn stats" onclick="showStats()">XEM THỐNG KÊ NGÀY</button>
   <button class="btn excel" onclick="exportExcel()">XUẤT EXCEL</button>
   <button class="btn close" onclick="closeDay()">CHỐT CUỐI NGÀY</button>
 </div>
@@ -299,30 +172,51 @@ html, body {
 
 <h3>LỊCH SỬ ĐÃ THANH TOÁN</h3>
 <div class="history" id="history"></div>
-
 </div>
 </div>
 
 <script>
 /* ===== DATA ===== */
-const tables=["B1","B2","B3","B4","B5","B6","B7","B8","B9"];
+const tables=["B1","B2","B3","B4","B5","B6","B7","B8","B9","B10","B11","B12"];
+
 const menuData=[
- ["25.000đ","chả thường",25000],["","chả quạt",25000],["","chả lá lốt",25000],
- ["","Bún mọc",25000],["","Bún lòng",25000],["","riêu cua",25000],["","Mì tôm",25000],
+ ["25.000đ","Nước riêu",0],  // Đưa lên đầu nhóm 25k
+ ["","Chả thường",25000],["","Chả quạt",25000],["","Chả lá lốt",25000],
+ ["","Mọc",25000],["","Lòng",25000],["","Riêu cua",25000],["","Mì tôm",25000],
+ ["","Bún20",25000],["","TH30",25000],["","TH40",25000],["","TH50",25000],
+
  ["20.000đ","Cháo",20000],["","Tiết canh",20000],
  ["15.000đ","Thuốc lá",15000],["","Bia",15000],["","Rượu",15000],["","Bò Húc",15000],
  ["10.000đ","Coca",10000],
- ["Khác","Mix 30k",30000],
- ["","Đĩa lòng 100k",100000],["","Đĩa lòng 150k",150000],["","Đĩa lòng 200k",200000]
+
+ ["Đĩa lòng","Đĩa lòng 10k",10000],["","Đĩa lòng 30k",30000],
+ ["","Đĩa lòng 50k",50000],["","Đĩa lòng 100k",100000],
+
+ ["Yêu cầu đặc biệt","Bỏ hành",0],["","Bỏ gan",0],["","Bỏ dạ dày",0],
+ ["","Bỏ lòng",0],["","Bỏ phổi",0],["","Chỉ lấy lòng",0],["","Chỉ lấy dạ dày",0],
+
+ ["Thêm topping (+5k)","+ Chả lá lốt",5000],["","+ Chả nướng",5000],
+ ["","+ Lòng",5000],["","+ Dạ dày",5000]
 ];
 
 let orders=JSON.parse(localStorage.getItem("orders")||"{}");
 let history=JSON.parse(localStorage.getItem("history")||"[]");
 let sold=JSON.parse(localStorage.getItem("sold")||"[]");
 let takeaway=Number(localStorage.getItem("takeaway")||0);
+let discounts = JSON.parse(localStorage.getItem("discounts")||"{}");
 let current="", lastPay=null;
+let mergeMode = false;
+let selectedSources = [];
 
-/* ===== MENU INIT (ĐÃ CHIA NHÓM GIÁ) ===== */
+function save(){
+  localStorage.setItem("orders",JSON.stringify(orders));
+  localStorage.setItem("history",JSON.stringify(history));
+  localStorage.setItem("sold",JSON.stringify(sold));
+  localStorage.setItem("takeaway",takeaway);
+  localStorage.setItem("discounts",JSON.stringify(discounts));
+}
+
+/* MENU INIT - TẤT CẢ MÓN BẤM LÀ THÊM LUÔN */
 const menuDiv=document.getElementById("menu");
 let groupBlock=null,lastGroup="";
 menuData.forEach(m=>{
@@ -345,76 +239,288 @@ menuData.forEach(m=>{
   groupBlock.querySelector(".menu-items").appendChild(b);
 });
 
-/* ===== PHẦN CÒN LẠI GIỮ NGUYÊN 100% ===== */
-/* (không sửa thêm để tránh sai) */
+/* Thêm món */
+function addItem(name, price){
+  if(!current) return alert("Chưa chọn bàn/đơn");
+  orders[current]=orders[current]||[];
+  orders[current].push({name, price, done:false, time:Date.now()});
+  save(); render();
+}
 
-function save(){localStorage.setItem("orders",JSON.stringify(orders));localStorage.setItem("history",JSON.stringify(history));localStorage.setItem("sold",JSON.stringify(sold));localStorage.setItem("takeaway",takeaway);}
-const tablesDiv=document.getElementById("tables");
-function renderTables(){tablesDiv.innerHTML="";tables.forEach(t=>{const b=document.createElement("button");b.className="table-btn";b.innerText=t;if(orders[t]?.length){const w=waitMin(t);if(w>=10)b.classList.add("danger");else if(w>=5)b.classList.add("warn");}if(current===t)b.classList.add("active");b.onclick=()=>select(t);tablesDiv.appendChild(b);});Object.keys(orders).forEach(t=>{if(t.startsWith("MV")){const b=document.createElement("button");b.className="table-btn warn";b.innerText=t;b.onclick=()=>select(t);tablesDiv.appendChild(b);}});}
-const orderList=document.getElementById("orderList"),totalDiv=document.getElementById("total"),currentSpan=document.getElementById("current"),currentBox=document.getElementById("currentBox");
-function select(t){current=t;render();}
-function addItem(name,price){if(!current)return alert("Chưa chọn bàn/đơn");orders[current]=orders[current]||[];orders[current].push({name,price,done:false,time:Date.now()});save();render();}
-function toggleDone(i){orders[current][i].done=!orders[current][i].done;save();render();}
-function delItem(i){orders[current].splice(i,1);save();render();}
-function waitMin(t){const p=(orders[t]||[]).filter(o=>!o.done);if(!p.length)return 0;return Math.floor((Date.now()-p[0].time)/60000);}
-function render(){orderList.innerHTML="";let sum=0,oldest=Infinity,oi=-1;(orders[current]||[]).forEach((o,i)=>{if(!o.done&&o.time<oldest){oldest=o.time;oi=i}});(orders[current]||[]).forEach((o,i)=>{sum+=o.price;const li=document.createElement("li");if(o.done)li.classList.add("done");if(i===oi&&!o.done)li.classList.add("longest");li.innerHTML=`<div class="order-left">${i+1}. <input type="checkbox"${o.done?" checked":""} onchange="toggleDone(${i})"> ${o.name} <span class="del" onclick="delItem(${i})">❌</span></div><div>${o.price.toLocaleString()}đ</div>`;orderList.appendChild(li);});currentSpan.innerText=current||"---";currentBox.innerText=current||"---";totalDiv.innerText=sum.toLocaleString()+" đ";renderActive();renderHistory();renderTables();}
-const activeList=document.getElementById("activeList");
-function renderActive(){activeList.innerHTML="";Object.keys(orders).forEach(t=>{if(!orders[t].length)return;const sum=orders[t].reduce((a,b)=>a+b.price,0);activeList.innerHTML+=`<li onclick="select('${t}')">${t} | ⏱️ ${waitMin(t)}p | 💰 ${sum.toLocaleString()}đ</li>`;});}
-function pay(){if(!current)return;lastPay={table:current,items:[...orders[current]]};history.unshift({table:current,time:new Date().toLocaleTimeString(),items:[...orders[current]]});sold.push(...orders[current]);if(current.startsWith("MV"))delete orders[current];else orders[current]=[];current="";save();render();}
-function undoPay(){if(!lastPay)return;orders[lastPay.table]=lastPay.items;current=lastPay.table;lastPay=null;save();render();}
-const historyDiv=document.getElementById("history");
-function renderHistory(){historyDiv.innerHTML="";history.forEach(h=>{const sum=h.items.reduce((a,b)=>a+b.price,0);historyDiv.innerHTML+=`<div><b>${h.time} – ${h.table}</b><br>${h.items.map(i=>`${i.name} ${i.price.toLocaleString()}đ`).join("<br>")}<br><b>Tổng: ${sum.toLocaleString()}đ</b><hr></div>`;});}
-function printBill(){if(!current)return alert("Chưa chọn bàn/đơn");let html=`<html><head><meta charset="UTF-8"><style>body{font-family:Arial;padding:20px}h2{text-align:center}.item{display:flex;justify-content:space-between;font-size:18px;margin:6px 0}.total{font-size:22px;font-weight:bold;margin-top:12px;text-align:right}</style></head><body><h2>HÓA ĐƠN ${current}</h2>`;let sum=0;orders[current].forEach(o=>{sum+=o.price;html+=`<div class="item"><span>${o.name}</span><span>${o.price.toLocaleString()}đ</span></div>`;});html+=`<div class="total">TỔNG: ${sum.toLocaleString()}đ</div><script>window.print();window.onafterprint=()=>window.close();<\/script></body></html>`;const w=window.open("","_blank");w.document.write(html);w.document.close();}
-function showStats(){
-  if(!sold || sold.length === 0){
-    showPopup("<h2>Chưa có dữ liệu trong ngày</h2>");
+/* GỘP ĐƠN */
+function toggleMergeMode(){
+  mergeMode = !mergeMode;
+  selectedSources = [];
+  const btn = document.getElementById("mergeBtn");
+  btn.classList.toggle("active", mergeMode);
+  btn.innerText = mergeMode ? "HỦY GỘP" : "GỘP ĐƠN";
+  renderTables();
+}
+
+function handleTableClick(t){
+  if(!mergeMode){
+    select(t);
     return;
   }
-
-  let total = 0;
-  let map = {};
-
-  sold.forEach(item=>{
-    if(!map[item.name]){
-      map[item.name] = {qty:0, money:0};
+  if(selectedSources.includes(t)){
+    selectedSources = selectedSources.filter(x=>x!==t);
+  }else{
+    selectedSources.push(t);
+  }
+  if(selectedSources.length >= 1 && current !== t && orders[t]?.length){
+    let dest = current || t;
+    if(!confirm(`Gộp ${selectedSources.join(", ")} vào ${dest}?`)) {
+      selectedSources = [];
+    }else{
+      selectedSources.forEach(src=>{
+        if(src !== dest && orders[src]){
+          orders[dest] = (orders[dest]||[]).concat(orders[src]);
+          if(discounts[src]) {
+            discounts[dest] = (discounts[dest]||0) + discounts[src];
+            delete discounts[src];
+          }
+          delete orders[src];
+        }
+      });
+      selectedSources = [];
+      toggleMergeMode();
+      select(dest);
+      save();
     }
-    map[item.name].qty++;
-    map[item.name].money += item.price;
-    total += item.price;
+  }
+  renderTables();
+}
+
+/* RENDER TABLES */
+const tablesDiv=document.getElementById("tables");
+function renderTables(){
+  tablesDiv.innerHTML="";
+  tables.forEach(t=>{
+    const b=document.createElement("button");
+    b.className="table-btn"; b.innerText=t;
+    if(orders[t]?.length){
+      const mins = waitMin(t);
+      if(mins>=10) b.classList.add("super-danger");
+      else if(mins>=5) b.classList.add("danger");
+    }
+    if(current===t) b.classList.add("active");
+    if(selectedSources.includes(t)) b.classList.add("selected");
+    b.onclick=()=>handleTableClick(t);
+    tablesDiv.appendChild(b);
+  });
+  Object.keys(orders).filter(t=>t.startsWith("MV")).forEach(t=>{
+    const b=document.createElement("button");
+    b.className="table-btn warn"; b.innerText=t;
+    if(current===t) b.classList.add("active");
+    if(selectedSources.includes(t)) b.classList.add("selected");
+    b.onclick=()=>handleTableClick(t);
+    tablesDiv.appendChild(b);
+  });
+}
+
+const orderList=document.getElementById("orderList"),
+      totalDiv=document.getElementById("total"),
+      discountAmount=document.getElementById("discountAmount"),
+      currentSpan=document.getElementById("current"),
+      currentBox=document.getElementById("currentBox"),
+      startTimeDiv=document.getElementById("startTime");
+
+function select(t){
+  current=t;
+  render();
+}
+
+function waitMin(t){
+  const items = orders[t]||[];
+  if(items.length===0) return 0;
+  return Math.floor((Date.now() - items[0].time)/60000);
+}
+
+function render(){
+  orderList.innerHTML="";
+  let sum=0;
+  const items = orders[current]||[];
+  items.forEach((o,i)=>{
+    sum += o.price;
+    const li=document.createElement("li");
+    li.innerHTML=`
+      <div class="order-left">
+        ${i+1}. <input type="checkbox" ${o.done?"checked":""} onchange="toggleDone(${i})">
+        ${o.name}
+        <span class="del" onclick="delItem(${i})">❌</span>
+      </div>
+      <div>${o.price.toLocaleString()}đ</div>`;
+    orderList.appendChild(li);
   });
 
-  let html = "<h2>THỐNG KÊ NGÀY</h2>";
+  const disc = discounts[current] || 0;
+  discountAmount.innerText = "Chiết khấu: " + disc.toLocaleString() + "đ";
+  totalDiv.innerText = (sum - disc).toLocaleString() + " đ";
 
-  for(const name in map){
-    html += `<div>${name}: ${map[name].qty} → ${map[name].money.toLocaleString()}đ</div>`;
+  currentSpan.innerText=current||"---";
+  currentBox.innerText=current||"---";
+
+  if(items.length>0){
+    const firstTime = new Date(items[0].time);
+    startTimeDiv.innerText = "Bắt đầu: " + firstTime.toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit"});
+  }else{
+    startTimeDiv.innerText="";
   }
 
-  html += `<hr><h1>TỔNG DOANH THU: ${total.toLocaleString()}đ</h1>`;
+  renderActive(); renderHistory(); renderTables();
+}
 
+function toggleDone(i){ orders[current][i].done=!orders[current][i].done; save(); render(); }
+function delItem(i){ if(confirm("Xóa món này?")){ orders[current].splice(i,1); save(); render(); } }
+function clearCurrentOrder(){
+  if(confirm("XÓA TOÀN BỘ order của " + current + "?")){
+    orders[current]=[]; delete discounts[current]; save(); render();
+  }
+}
+
+const activeList=document.getElementById("activeList");
+function renderActive(){
+  activeList.innerHTML="";
+  Object.keys(orders).sort().forEach(t=>{
+    if(!orders[t].length) return;
+    const sum=orders[t].reduce((a,b)=>a+b.price,0);
+    const disc = discounts[t]||0;
+    const final = sum - disc;
+    const mins = waitMin(t);
+    activeList.innerHTML+=`<li onclick="select('${t}')">${t} | ⏱️ ${mins}p | 🪑 ${mins}p | 💰 ${final.toLocaleString()}đ</li>`;
+  });
+}
+
+function pay(){
+  if(!current || !orders[current]?.length) return alert("Chưa có order");
+  const items = [...orders[current]];
+  const disc = discounts[current]||0;
+  const sum = items.reduce((a,b)=>a+b.price,0);
+  const final = sum - disc;
+
+  lastPay={table:current, items, discount:disc};
+  history.unshift({table:current, time:new Date().toLocaleTimeString(), items, discount:disc, total:final});
+  sold.push(...items);
+  if(current.startsWith("MV")) delete orders[current];
+  else orders[current]=[];
+  delete discounts[current];
+  current="";
+  save(); render();
+}
+
+function undoPay(){
+  if(!lastPay) return alert("Không có thanh toán nào để hoàn tác");
+  orders[lastPay.table] = lastPay.items;
+  if(lastPay.discount) discounts[lastPay.table] = lastPay.discount;
+  current = lastPay.table;
+  lastPay=null;
+  save(); render();
+}
+
+const historyDiv=document.getElementById("history");
+function renderHistory(){
+  historyDiv.innerHTML="";
+  history.forEach(h=>{
+    const sum=h.items.reduce((a,b)=>a+b.price,0);
+    historyDiv.innerHTML+=`<div><b>${h.time} – ${h.table}</b> ${h.discount?`(CK: ${h.discount.toLocaleString()}đ)`:""}<br>
+      ${h.items.map(i=>i.name + " " + i.price.toLocaleString()+"đ").join("<br>")}
+      <br><b>Tổng: ${h.total.toLocaleString()}đ</b></div>`;
+  });
+}
+
+function printBill(){
+  if(!current || !orders[current]?.length) return alert("Chưa có order");
+  let html=`<html><head><meta charset="UTF-8"><style>body{font-family:Arial;padding:20px}h2{text-align:center}.item{margin:8px 0;font-size:20px;display:flex;justify-content:space-between}.total{font-size:26px;font-weight:bold;margin-top:20px;text-align:right}</style></head><body><h2>HÓA ĐƠN ${current}</h2>`;
+  let sum=0;
+  orders[current].forEach(o=>{
+    sum+=o.price;
+    html+=`<div class="item"><span>${o.name}</span><span>${o.price.toLocaleString()}đ</span></div>`;
+  });
+  const disc = discounts[current]||0;
+  if(disc>0) html+=`<div class="item"><span>Chiết khấu</span><span>-${disc.toLocaleString()}đ</span></div>`;
+  html+=`<div class="total">TỔNG: ${(sum-disc).toLocaleString()}đ</div><script>window.print();window.onafterprint=()=>window.close();<\/script></body></html>`;
+  const w=window.open("","_blank");
+  w.document.write(html); w.document.close();
+}
+
+function applyDiscount(){
+  if(!current) return alert("Chưa chọn bàn");
+  let input = prompt("Nhập chiết khấu:\n- Nhập số tiền (ví dụ: 10000)\n- Hoặc % (ví dụ: 10%)", "");
+  if(input===null || input==="") return;
+  let disc=0;
+  if(input.endsWith("%")){
+    const percent = parseFloat(input);
+    if(isNaN(percent)) return alert("Sai định dạng");
+    const sum = (orders[current]||[]).reduce((a,b)=>a+b.price,0);
+    disc = Math.round(sum * percent / 100);
+  }else{
+    disc = parseInt(input.replace(/\D/g,""))||0;
+  }
+  discounts[current] = disc;
+  save(); render();
+}
+
+function showStats(){
+  if(!sold.length){ showPopup("<h2>Chưa có dữ liệu trong ngày</h2>"); return; }
+  let total=0, map={};
+  sold.forEach(item=>{
+    if(!map[item.name]) map[item.name]={qty:0,money:0};
+    map[item.name].qty++; map[item.name].money+=item.price;
+    total+=item.price;
+  });
+  let html="<h2>THỐNG KÊ NGÀY</h2>";
+  for(const name in map){
+    html+=`<div>${name}: ${map[name].qty} → ${map[name].money.toLocaleString()}đ</div>`;
+  }
+  html+=`<hr><h1>TỔNG DOANH THU: ${total.toLocaleString()}đ</h1>`;
   showPopup(html);
 }
 
-
-
-function exportExcel(){if(!history.length){alert("Chưa có dữ liệu");return;}let summary={},rows1=[["Món","Số lượng","Tổng tiền"]];sold.forEach(i=>{summary[i.name]=summary[i.name]||{q:0,t:0};summary[i.name].q++;summary[i.name].t+=i.price;});Object.keys(summary).forEach(k=>{rows1.push([k,summary[k].q,summary[k].t]);});let rows2=[["Thời gian","Bàn","Món","Giá"]];history.forEach(h=>{h.items.forEach(i=>{rows2.push([h.time,h.table,i.name,i.price]);});});const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(rows1),"TongHop");XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(rows2),"DonHang");XLSX.writeFile(wb,`order-${new Date().toISOString().slice(0,10)}.xlsx`);}
-function closeDay(){if(!confirm("Chốt cuối ngày?"))return;orders={};history=[];sold=[];takeaway=0;save();render();}
-function addTakeaway(){takeaway++;const id="MV"+String(takeaway).padStart(2,"0");orders[id]=[];save();select(id);}
-function showPopup(html){
-  const overlay = document.getElementById("overlay");
-  const content = document.getElementById("popupContent");
-
-  content.innerHTML = html;
-  overlay.style.display = "flex";
-
-  console.log("Popup opened"); // để chắc chắn
+function exportExcel(){
+  if(!history.length){alert("Chưa có dữ liệu");return;}
+  let summary={},rows1=[["Món","Số lượng","Tổng tiền"]];
+  sold.forEach(i=>{
+    summary[i.name]=summary[i.name]||{q:0,t:0};
+    summary[i.name].q++; summary[i.name].t+=i.price;
+  });
+  Object.keys(summary).forEach(k=>rows1.push([k,summary[k].q,summary[k].t]));
+  let rows2=[["Thời gian","Bàn","Món","Giá"]];
+  history.forEach(h=>{
+    h.items.forEach(i=>{
+      rows2.push([h.time,h.table,i.name,i.price]);
+    });
+  });
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(rows1),"TongHop");
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(rows2),"DonHang");
+  XLSX.writeFile(wb,`order-${new Date().toISOString().slice(0,10)}.xlsx`);
 }
 
-function closePopup(){document.getElementById("overlay").style.display="none";}
-renderTables();render();setInterval(renderTables,60000);
-document.addEventListener('gesturestart', function (e) {
-  e.preventDefault();
-});
+function closeDay(){
+  if(!confirm("Chốt cuối ngày? Toàn bộ dữ liệu ngày sẽ bị xóa!")) return;
+  orders={}; history=[]; sold=[]; takeaway=0; discounts={};
+  save(); render();
+}
 
+function addTakeaway(){
+  takeaway++;
+  const id="MV"+String(takeaway).padStart(2,"0");
+  orders[id]=[];
+  save(); select(id);
+}
+
+function showPopup(html){
+  document.getElementById("popupContent").innerHTML=html;
+  document.getElementById("overlay").style.display="flex";
+}
+
+function closePopup(){
+  document.getElementById("overlay").style.display="none";
+}
+
+renderTables(); render();
+setInterval(renderTables,60000);
+document.addEventListener('gesturestart', e=>e.preventDefault());
 </script>
 
 </body>

@@ -13,6 +13,17 @@ h2,h3{margin:10px 0}
 button{cursor:pointer}
 body{-webkit-text-size-adjust:100%;}
 html,body{touch-action:manipulation;}
+  /* Đảm bảo nút Tiết canh hiển thị trên 1 dòng */
+.menu-items button {
+  white-space: nowrap; /* Không cho xuống dòng */
+  overflow: hidden;    /* Ẩn phần tràn nếu cần */
+  text-overflow: ellipsis; /* Thêm ... nếu quá dài */
+}
+
+/* Nếu vẫn bị, tăng min-width cho nút trong nhóm 20k */
+.menu-group-block:nth-of-type(2) .menu-items button {
+  min-width: 120px; /* Tăng chiều rộng tối thiểu để đủ chỗ */
+}
 /* Tô màu RIÊNG CHO NÚT "Nước riêu" - CHỈ NHÓM 25.000đ */
 .menu-group-block:first-of-type .menu-items button:first-child {
   background: #ffb366 !important; /* Cam nhạt riêu cua */

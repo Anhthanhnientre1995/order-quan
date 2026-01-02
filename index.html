@@ -506,7 +506,12 @@ function addTakeaway(){
   takeaway++;
   const id="MV"+String(takeaway).padStart(2,"0");
   orders[id]=[];
-  save(); select(id);
+  save();
+  select(id);
+  // Force re-render ngay lập tức cho mobile
+  setTimeout(() => {
+    renderTables();
+  }, 100);
 }
 
 function showPopup(html){

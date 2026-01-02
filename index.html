@@ -508,10 +508,8 @@ function addTakeaway(){
   orders[id]=[];
   save();
   select(id);
-  // Force re-render ngay lập tức cho mobile
-  setTimeout(() => {
-    renderTables();
-  }, 100);
+  // Force re-render ngay lập tức cho iPad/iPhone (Safari)
+  setTimeout(() => requestAnimationFrame(() => renderTables()), 100);
 }
 
 function showPopup(html){

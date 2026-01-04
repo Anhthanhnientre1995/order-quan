@@ -448,10 +448,17 @@ function pay(){
 
 function undoPay(){
   if(!lastPay) return alert("Không có thanh toán nào để hoàn tác");
+  
+  // Khôi phục order (giữ nguyên code gốc)
   orders[lastPay.table] = lastPay.items;
   if(lastPay.discount) discounts[lastPay.table] = lastPay.discount;
+  
+  // Hoàn tác thống kê và lịch sử
+  history.shift();  // Xóa lần pay cuối khỏi history (vì unshift thêm vào đầu)
+  sold.splice(-lastPay.items.length);  // Xóa các items cuối khỏi sold (vì push thêm vào cuối)
+  
   current = lastPay.table;
-  lastPay=null;
+  lastPay = null;
   save(); render();
 }
 

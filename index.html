@@ -13,30 +13,30 @@ h2,h3{margin:10px 0}
 button{cursor:pointer}
 body{-webkit-text-size-adjust:100%;}
 html,body{touch-action:manipulation;}
-  /* Đảm bảo nút Tiết canh hiển thị trên 1 dòng */
+
+/* Đảm bảo nút Tiết canh hiển thị trên 1 dòng */
 .menu-items button {
-  white-space: nowrap; /* Không cho xuống dòng */
-  overflow: hidden;    /* Ẩn phần tràn nếu cần */
-  text-overflow: ellipsis; /* Thêm ... nếu quá dài */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Nếu vẫn bị, tăng min-width cho nút trong nhóm 20k */
 .menu-group-block:nth-of-type(2) .menu-items button {
-  min-width: 120px; /* Tăng chiều rộng tối thiểu để đủ chỗ */
-}
-/* Tô màu RIÊNG CHO NÚT "Nước riêu" - CHỈ NHÓM 25.000đ */
-.menu-group-block:first-of-type .menu-items button:first-child {
-  background: #ffb366 !important; /* Cam nhạt riêu cua */
-  color: #333 !important; /* Chữ tối dễ đọc */
-  border-color: #ff8c00 !important;
-  font-weight: bold !important; /* In đậm nổi bật */
+  min-width: 120px;
 }
 
-/* Khi bấm nút vẫn highlight đẹp */
+.menu-group-block:first-of-type .menu-items button:first-child {
+  background: #ffb366 !important;
+  color: #333 !important;
+  border-color: #ff8c00 !important;
+  font-weight: bold !important;
+}
+
 .menu-group-block:first-of-type .menu-items button:first-child:active {
   background: #ffda99 !important;
   border-color: #e67e22 !important;
 }
+
 /* iPad TOUCH OPTIMIZATION */
 @media (hover:none) and (pointer:coarse){
   .menu-items button{font-size:26px;padding:18px;border-radius:10px;}
@@ -47,10 +47,10 @@ html,body{touch-action:manipulation;}
 }
 
 /* layout */
-.wrapper{display:flex;gap:10px;height:calc(100vh - 80px);}
-.left{flex:2.8;overflow-y:auto;}
-.mid{flex:2;overflow-y:auto;}
-.right{flex:1;border-left:2px solid #ccc;padding-left:10px;overflow-y:auto;}
+.wrapper{display:flex;gap:12px;height:calc(100vh - 80px);}
+.left{flex:2.6;overflow-y:auto;}
+.mid{flex:3.2;overflow-y:auto;}
+.right{flex:1.4;border-left:2px solid #ccc;padding-left:12px;overflow-y:auto;}
 
 /* BÀN */
 .tables{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
@@ -75,36 +75,23 @@ html,body{touch-action:manipulation;}
 .menu-price{margin:20px 0 10px;font-size:22px;font-weight:bold;border-bottom:2px solid #ddd;padding-bottom:4px;}
 .menu-items{
   display: grid;
-  grid-template-columns: repeat(4, minmax(130px, 1fr)) !important; /* Tối thiểu 130px mỗi cột → đủ chỗ cho tên dài */
+  grid-template-columns: repeat(4, minmax(100px, 1fr)) !important;
   gap: 12px;
 }
-/* Nút món - hiển thị đầy đủ, nằm gọn trong ô */
 .menu-items button{
-  font-size: 22px !important;           /* Font vừa phải trên iPad */
+  font-size: 22px !important;
   font-weight: 600;
-  padding: 16px 10px !important;        /* Padding dọc giữ đẹp, ngang giảm để rộng hơn */
+  padding: 16px 10px !important;
   border-radius: 10px;
   border: 2px solid #333;
   background: #f5f5f5;
   text-align: center;
   line-height: 1.3;
-  white-space: nowrap !important;       /* Không xuống dòng */
-  overflow: hidden !important;          /* Không tràn ra ngoài */
-  text-overflow: clip !important;       /* Không dùng "..." → cắt gọn nếu quá dài (nhưng với min-width mới sẽ không xảy ra) */
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
   max-width: 100% !important;
   box-sizing: border-box !important;
-}
-
-/* Grid menu - cho phép cột tự mở rộng theo nội dung dài nhất */
-.menu-items {
-  grid-template-columns: repeat(4, minmax(120px, 1fr)) !important; /* Tối thiểu 120px mỗi cột */
-  gap: 12px;
-}
-
-/* Đảm bảo grid cho phép nút mở rộng */
-.menu-items {
-  grid-template-columns: repeat(4, minmax(100px, 1fr)) !important; /* Tối thiểu 100px mỗi cột, tự mở rộng */
-  gap: 12px;
 }
 .menu-items button:active{background:#d9f2ff;border-color:#0077cc;}
 
@@ -115,8 +102,69 @@ html,body{touch-action:manipulation;}
 }
 .order-left{display:flex;gap:5px;align-items:center;}
 .done{text-decoration:line-through;color:#777}
-.longest{font-weight:bold;color:#b30000}
 .del{color:red;font-weight:bold;margin-left:4px}
+
+/* KHU VỰC NHÀ BẾP (giữa màn hình) */
+.kitchen-section {
+  margin: 20px 0;
+  padding: 16px;
+  background: #fffef5;
+  border: 2px solid #f39c12;
+  border-radius: 10px;
+  min-height: 200px;
+}
+.kitchen-section h3 {
+  margin: 0 0 12px 0;
+  color: #c0392b;
+  font-size: 24px;
+  text-align: center;
+  background: #fff8e1;
+  padding: 8px;
+  border-radius: 6px;
+}
+.kitchen-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.kitchen-list li {
+  background: #fff;
+  border-left: 6px solid #f39c12;
+  padding: 14px 16px;
+  margin: 10px 0;
+  border-radius: 6px;
+  font-size: 20px;
+  line-height: 1.4;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+.kitchen-list .table-name {
+  font-weight: bold;
+  color: #2c3e50;
+  font-size: 22px;
+}
+.kitchen-list .time-wait {
+  font-size: 17px;
+  color: #e67e22;
+  float: right;
+  font-weight: bold;
+}
+.kitchen-list .items {
+  margin-top: 8px;
+  padding-left: 12px;
+}
+.kitchen-list .item {
+  position: relative;
+  padding-left: 22px;
+  margin: 5px 0;
+}
+.kitchen-list .item::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #e74c3c;
+  font-size: 26px;
+  line-height: 1;
+}
 
 /* thanh toán */
 .payment-box{
@@ -188,6 +236,12 @@ html,body{touch-action:manipulation;}
 
 <button class="btn clear" onclick="clearCurrentOrder()">XÓA TOÀN BỘ ORDER</button>
 <button class="btn merge" onclick="toggleMergeMode()" id="mergeBtn">GỘP ĐƠN</button>
+
+<!-- Khu vực nhà bếp chuyển vào giữa -->
+<div class="kitchen-section">
+  <h3>KHU VỰC NHÀ BẾP – MÓN ĐANG CHỜ</h3>
+  <ul class="kitchen-list" id="kitchenList"></ul>
+</div>
 </div>
 
 <div class="right">
@@ -214,11 +268,11 @@ html,body{touch-action:manipulation;}
 </div>
 
 <script>
-/* ===== DATA ===== */
+// ===== DATA =====
 const tables=["B1","B2","B3","B4","B5","B6","B7","B8","B9","B10","B11","B12"];
 
 const menuData=[
- ["30.000đ","Nước riêu",0],  // Đưa lên đầu nhóm 25k
+ ["30.000đ","Nước riêu",0],
  ["","Chả thường",30000],["","Chả quạt",30000],["","Chả lá lốt",30000],
  ["","Thịt nạc",30000],["","Lòng",30000],["","Riêu cua",30000],["","Mì tôm",30000],
  ["","Bún20",20000],["","Thịt sọ",30000],["","TH40",40000],["","TH50",50000],
@@ -254,7 +308,7 @@ function save(){
   localStorage.setItem("discounts",JSON.stringify(discounts));
 }
 
-/* MENU INIT - TẤT CẢ MÓN BẤM LÀ THÊM LUÔN */
+/* MENU INIT */
 const menuDiv=document.getElementById("menu");
 let groupBlock=null,lastGroup="";
 menuData.forEach(m=>{
@@ -405,14 +459,78 @@ function render(){
     startTimeDiv.innerText="";
   }
 
-  renderActive(); renderHistory(); renderTables();
+  renderActive();
+  renderKitchen();
+  renderHistory();
+  renderTables();
 }
 
-function toggleDone(i){ orders[current][i].done=!orders[current][i].done; save(); render(); }
-function delItem(i){ if(confirm("Xóa món này?")){ orders[current].splice(i,1); save(); render(); } }
+/* === KHU VỰC NHÀ BẾP === */
+function renderKitchen() {
+  const kitchenList = document.getElementById("kitchenList");
+  kitchenList.innerHTML = "";
+
+  const activeTables = Object.keys(orders).filter(t => 
+    orders[t] && orders[t].some(item => !item.done)
+  );
+
+  if (activeTables.length === 0) {
+    kitchenList.innerHTML = '<li style="text-align:center;color:#999;padding:30px 0;font-size:20px;">Hiện không có món nào đang chờ</li>';
+    return;
+  }
+
+  activeTables.sort((a, b) => {
+    const timeA = Math.min(...orders[a].filter(i => !i.done).map(i => i.time || Infinity));
+    const timeB = Math.min(...orders[b].filter(i => !i.done).map(i => i.time || Infinity));
+    return timeA - timeB;
+  });
+
+  activeTables.forEach(table => {
+    const pendingItems = orders[table].filter(item => !item.done);
+    if (pendingItems.length === 0) return;
+
+    const oldestTime = Math.min(...pendingItems.map(i => i.time));
+    const waitMin = Math.floor((Date.now() - oldestTime) / 60000);
+
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <div>
+        <span class="table-name">${table}</span>
+        <span class="time-wait">⏱ ${waitMin} phút${waitMin >= 10 ? ' (LÂU)' : ''}</span>
+      </div>
+      <div class="items">
+        ${pendingItems.map(item => `
+          <div class="item">
+            ${item.name} 
+            <small style="color:#555;">(${item.price.toLocaleString()}đ)</small>
+          </div>
+        `).join("")}
+      </div>
+    `;
+    kitchenList.appendChild(li);
+  });
+}
+
+function toggleDone(i){ 
+  orders[current][i].done = !orders[current][i].done; 
+  save(); 
+  render(); 
+}
+
+function delItem(i){ 
+  if(confirm("Xóa món này?")){ 
+    orders[current].splice(i,1); 
+    save(); 
+    render(); 
+  } 
+}
+
 function clearCurrentOrder(){
   if(confirm("XÓA TOÀN BỘ order của " + current + "?")){
-    orders[current]=[]; delete discounts[current]; save(); render();
+    orders[current]=[]; 
+    delete discounts[current]; 
+    save(); 
+    render();
   }
 }
 
@@ -425,7 +543,7 @@ function renderActive(){
     const disc = discounts[t]||0;
     const final = sum - disc;
     const mins = waitMin(t);
-    activeList.innerHTML+=`<li onclick="select('${t}')">${t} | ⏱️ ${mins}p | 🪑 ${mins}p | 💰 ${final.toLocaleString()}đ</li>`;
+    activeList.innerHTML+=`<li onclick="select('${t}')">${t} | ⏱️ ${mins}p | 💰 ${final.toLocaleString()}đ</li>`;
   });
 }
 
@@ -449,16 +567,14 @@ function pay(){
 function undoPay(){
   if(!lastPay) return alert("Không có thanh toán nào để hoàn tác");
   
-  // Khôi phục order (giữ nguyên code gốc)
   orders[lastPay.table] = lastPay.items;
   if(lastPay.discount) discounts[lastPay.table] = lastPay.discount;
   
-  // Hoàn tác thống kê và lịch sử
-  history.shift();  // Xóa lần pay cuối khỏi history (vì unshift thêm vào đầu)
-  sold.splice(-lastPay.items.length);  // Xóa các items cuối khỏi sold (vì push thêm vào cuối)
+  history.shift();
+  sold.splice(-lastPay.items.length);
   
   current = lastPay.table;
-  lastPay = null;
+  lastPay=null;
   save(); render();
 }
 
@@ -553,7 +669,6 @@ function addTakeaway(){
   orders[id]=[];
   save();
   select(id);
-  // Force re-render ngay lập tức cho iPad/iPhone (Safari)
   setTimeout(() => requestAnimationFrame(() => renderTables()), 100);
 }
 
@@ -566,8 +681,14 @@ function closePopup(){
   document.getElementById("overlay").style.display="none";
 }
 
-renderTables(); render();
-setInterval(renderTables,60000);
+/* Khởi tạo & cập nhật định kỳ */
+renderTables(); 
+render();
+setInterval(() => {
+  renderTables();
+  renderKitchen();
+}, 60000);
+
 document.addEventListener('gesturestart', e=>e.preventDefault());
 </script>
 
